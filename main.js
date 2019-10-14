@@ -5,6 +5,7 @@
     const data = [];
     const catogoryList = document.getElementById('catogoryList');
     const dataPanel = document.getElementById('dataPanel'); 
+    let movieCatogory = [];
 
     catogoryListData = {
         "1": "Action",
@@ -33,33 +34,36 @@
         data.push(...response.data.results);
     })
     
-    //01.catogory select
-    let movieCatogory = [];
-    
-    function catogorySelect(event){
-
-    }
-
-    //02.gerenateTemplate
+    //01.gerenateTemplate
     function generateTemplate(){
         let htmlContent = '';
         movieCatogory.forEach(function(movie){
-            htmlContent = `
-            <div class="col-sm-3">
+            htmlContent += `
+            <div class="col-sm-4">
                 <div class="card mb-2">
                     <img class="card-img-top " src="${POSTER_URL}${movie.image}" alt="Card image cap">
                     <div class="card-body movie-item-body">
                         <h5 class="card-title">${movie.title}</h5>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-primary btn-show-movie" data-toggle="modal" data-target="#show-movie-modal" data-id="${item.id}">More</button>
-                        <button class="btn btn-danger btn-remove-favorite" data-id="${movie.id}">X</button>
+                        ${gerenateMovieTypeTag(movie.genres)}
                     </div>
                 </div>
             </div>
             `
         })
         dataPanel.innerHTML = htmlContent;
+    }
+
+    //02.gerenateMovieTypeTag
+    function gerenateMovieTypeTag(tags){
+        let movieTypeTag = '';
+        tags.forEach(function(tag){
+            movieTypeTag += `
+            <span class="bg-primary rounded">${catogoryListData[tag]}</span>
+            `
+        })
+        return movieTypeTag
     }
 
     //03.gerenateMenu
@@ -69,8 +73,8 @@
        let htmlContent = '';
        for(let i = 0;i < numberList.length;i++){
             htmlContent += `
-            <ul>
-                <li data-id="${numberList[i]}">${typeList[i]}</li>
+            <ul class="list-group">
+                <li class="list-group-item" data-id="${numberList[i]}">${typeList[i]}</li>
             </ul>
             `
        }
@@ -78,8 +82,23 @@
     }
     generateMenu();
 
+    //04.catogory select
+    function catogorySelect(event){
+        movieCatogory = [];
+        data.forEach(function(movie){
+            movie.genres.filter(function(type){
+                if(Number(type) === Number(event.target.dataset.id)){
+                    movieCatogory.push(movie)
+                }
+            })
+        })
+        generateTemplate();
+    }
+
     //listen
-    catogoryList.addEventListener('click', catogorySelect);
+    catogoryList.addEventListener('click', function(){
+        catogorySelect(event)
+    });
 
 
 
