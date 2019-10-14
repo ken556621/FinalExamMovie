@@ -99,11 +99,4 @@
     catogoryList.addEventListener('click', function(){
         catogorySelect(event)
     });
-
-
-
-
-
-
-
 }());
