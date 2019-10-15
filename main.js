@@ -53,6 +53,10 @@
             `
         })
         dataPanel.innerHTML = htmlContent;
+        if(movieCatogory.length === 0){
+            dataPanel.innerHTML = `<h2 class="alert">Sorry this catogory doesn't have any movie!</h2>`
+            console.log(movieCatogory);
+        }
     }
 
     //02.gerenateMovieTypeTag
@@ -60,7 +64,7 @@
         let movieTypeTag = '';
         tags.forEach(function(tag){
             movieTypeTag += `
-            <span class="bg-primary rounded">${catogoryListData[tag]}</span>
+            <span class="rounded tag">${catogoryListData[tag]}</span>
             `
         })
         return movieTypeTag
